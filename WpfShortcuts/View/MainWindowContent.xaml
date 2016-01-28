@@ -1,0 +1,126 @@
+<UserControl x:Class="WpfShortcuts.View.MainWindowContent"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+			 xmlns:view="clr-namespace:WpfShortcuts.View"
+			 xmlns:viewmodel="clr-namespace:WpfShortcuts.ViewModel"
+			 xmlns:controls="clr-namespace:CommonUI.Controls;assembly=CommonUI"
+			 xmlns:converters="clr-namespace:CommonUI.Converters;assembly=CommonUI"
+			 SnapsToDevicePixels="True"
+			 FontFamily="Segoe UI Symbol"			 
+             d:DesignHeight="500" d:DesignWidth="700">
+
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converters:UriToBitmapConverter x:Key="UriToBitmapConverter" />
+    </UserControl.Resources>
+
+    <UserControl.DataContext>
+        <viewmodel:MainWindowContentViewModel />
+    </UserControl.DataContext>
+
+
+
+    <Grid>
+        <Grid.InputBindings>
+            <KeyBinding Key="S" Modifiers="Ctrl" Command="{Binding Path=saveItemsCommand}" />
+        </Grid.InputBindings>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>            
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />            
+        </Grid.ColumnDefinitions>
+
+
+
+        <!-- Menu -->
+        <Menu Grid.ColumnSpan="20" Background="{x:Null}" >
+            <MenuItem Header="Lists" Foreground="#FF898989">
+                <MenuItem Header="Save" Command="{Binding Path=saveItemsCommand}" InputGestureText="Ctrl+S" />
+                <MenuItem Header="Save As" Command="{Binding Path=saveItemsAsCommand}" />
+                <MenuItem Header="Open" Command="{Binding Path=importItemsCommand}" />
+
+            </MenuItem>
+            <MenuItem Header="Items" Foreground="#FF898989">
+                <MenuItem Header="Copy Selected Item Path" Command="{Binding Path=copyItemPathCommand}" InputGestureText="Ctrl+C" />
+                <MenuItem Header="Remove Selected Item" Command="{Binding Path=removeItemCommand}" InputGestureText="Delete" />
+                <Separator />
+                <MenuItem Header="Clear List" Command="{Binding Path=clearListCommand}" />
+            </MenuItem>
+        </Menu>
+
+
+        <!-- Search Textbox -->
+        <Label Grid.Row="1" VerticalAlignment="Center">Filter:</Label>
+        <TextBox Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" VerticalAlignment="Center" Height="30" Margin="5" BorderBrush="{x:Null}" 
+				 Text="{Binding Path=filterText, UpdateSourceTrigger=PropertyChanged}" ToolTip="Type here to filter the items, but don't reorder items while the list is filtered" />
+
+
+
+
+        <Grid Grid.Row="2" Grid.ColumnSpan="3">
+
+            <!-- ListBox -->
+            <controls:ListBoxDragDrop Name="Listbox1" ItemsSource="{Binding Path=items}" Margin="5,0,5,0" SelectedItem="{Binding Path=selectedItem}"
+								   HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ToolTipService.ShowDuration="60000" KeyboardNavigation.TabNavigation="Cycle">
+
+                <controls:ListBoxDragDrop.InputBindings>
+                    <KeyBinding Key="C" Modifiers="Ctrl" Command="{Binding Path=copyItemPathCommand}" />
+                    <KeyBinding Key="Delete" Command="{Binding Path=removeItemCommand}" />
+                </controls:ListBoxDragDrop.InputBindings>
+
+                <controls:ListBoxDragDrop.ItemTemplate >
+                    <DataTemplate >
+                        <Grid ToolTip="{Binding Path=path}" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition MinWidth="80" Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <Image Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="20" Height="20" Source="{Binding Path=image}" Margin="3,0,3,0"/>
+                            <TextBox Tag="TextBoxDisplayName" Grid.Column="1" VerticalAlignment="Center" FontWeight="SemiBold" 
+									 Style="{StaticResource EditableTextBox}" Text="{Binding Path=displayName}" Margin="3,0,25,0" />
+
+                            <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{Binding Path=path}" Margin="3,0,3,0" Foreground="#FF898989" TextTrimming="CharacterEllipsis" />
+
+                            <Button Grid.Column="3" Margin="5,0,5,0" Width="50" Command="{Binding Path=openFolderCommand}"
+									Visibility="{Binding isFile, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Visible}" >Folder</Button>
+                            <Button Grid.Column="4" Margin="5,0,5,0" Width="50" Command="{Binding Path=startProgramCommand}">Open</Button>
+                        </Grid>
+                    </DataTemplate>
+                </controls:ListBoxDragDrop.ItemTemplate>
+
+            </controls:ListBoxDragDrop>
+        </Grid>
+
+        <Grid Grid.Row="3" Grid.ColumnSpan="3">
+            <TextBlock Text="{Binding Path=currentFileName, StringFormat=Current List: {0}}" Margin="15,1,1,3"></TextBlock>
+            <TextBlock HorizontalAlignment="Right" Margin="1,1,15,3" 
+					   Visibility="{Binding showSaveText, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Hidden}" >Saving...</TextBlock>
+        </Grid>
+
+        <!-- Dropzone -->
+        <Grid Name="GridDrop" Grid.Row="4" Grid.ColumnSpan="3" Height="50" Background="#FF4D8CE1" 
+			  AllowDrop="True" PreviewDragOver="Listbox1_DragOver" PreviewDrop="Listbox1_Drop" PreviewDragEnter="GridDrop_PreviewDragEnter" PreviewDragLeave="GridDrop_PreviewDragLeave"
+			  >
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Image Name="ImageDragDrop" Height="30" Width="30" Source="/Resources/plus_normal2.png" />
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FFB3B3B3" Margin="30,0,0,2">drag and drop files onto here</TextBlock>
+            </StackPanel>
+        </Grid>
+    </Grid>
+
+
+</UserControl>

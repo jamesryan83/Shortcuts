@@ -1,0 +1,81 @@
+<Window x:Class="WpfShortcuts.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:view="clr-namespace:WpfShortcuts.View"
+		xmlns:viewmodel="clr-namespace:WpfShortcuts.ViewModel"
+		xmlns:model="clr-name"
+		xmlns:controls="clr-namespace:CommonUI.Controls;assembly=CommonUI"		
+        Height="500" Width="700" WindowStyle="None" WindowStartupLocation="CenterScreen" SnapsToDevicePixels="True"
+		FontFamily="Segoe UI Symbol" WindowState="{Binding windowState}" ResizeMode="NoResize" Loaded="Window_Loaded">
+
+	
+	<!-- Set ViewModel -->
+	<Window.DataContext>
+		<viewmodel:MainWindowViewModel />
+	</Window.DataContext>
+
+	
+	<!-- Main Grid -->
+	<Border BorderBrush="{StaticResource MainWindowBorderColor}" BorderThickness="1">
+		<Grid>
+
+			<!-- Grid for rectangles -->
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="*" />
+				<RowDefinition Height="Auto" />
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="Auto" />
+			</Grid.ColumnDefinitions>
+
+			<!-- Main Content Grid -->
+			<Grid Grid.RowSpan="3" Grid.ColumnSpan="3" Background="{StaticResource MainWindowBackgroundColor}">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="*"/>					
+				</Grid.RowDefinitions>
+
+				<!-- Title Bar -->
+				<Grid Height="25" Background="{StaticResource TitleBarColor}">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto" />
+						<ColumnDefinition Width="*" />
+						<ColumnDefinition Width="Auto" />
+						<ColumnDefinition Width="Auto" />
+						<ColumnDefinition Width="Auto" />
+					</Grid.ColumnDefinitions>
+
+                    <TextBlock FontWeight="Bold" FontSize="12" VerticalAlignment="Center" Margin="10,-1,0,0" Foreground="#B3B3B3">Shortcuts</TextBlock>
+
+                    <!-- The commands here get the datacontext of whatever View they're added to -->
+					<controls:ImageButton Grid.Column="2" ImageButtonSource="../Resources/minimise_normal.png" Command="{Binding minimiseCommand}" />
+					<controls:ImageButton Grid.Column="3" ImageButtonSource="{Binding restoreOrMaximiseImageButtonSource}" Command="{Binding restoreOrMaximiseCommand}" />
+					<controls:ImageButton Grid.Column="4" ImageButtonSource="../Resources/close_normal.png" Command="{Binding closeCommand}" />
+
+				</Grid>
+
+
+				<!-- Content is in here-->
+				<view:MainWindowContent Grid.Row="1" />
+				
+			</Grid>
+
+
+			<!-- Resizing Rectangles -->
+			<Rectangle Name="RectangleResizeNW" Grid.Row="0" Grid.Column="0" Width="5" Height="5" Fill="Transparent" Tag="ResizingRectangle" />
+			<Rectangle Name="RectangleResizeN" Grid.Row="0" Grid.Column="1" Height="5" Fill="Transparent" Tag="ResizingRectangle" />
+			<Rectangle Name="RectangleResizeNE" Grid.Row="0" Grid.Column="2" Width="5" Height="5" Fill="Transparent" Tag="ResizingRectangle"/>
+
+			<Rectangle Name="RectangleResizeW" Grid.Row="1" Grid.Column="0" Width="5" Fill="Transparent" Tag="ResizingRectangle" />
+			<Rectangle Name="RectangleResizeE" Grid.Row="1" Grid.Column="2" Width="5" Fill="Transparent" Tag="ResizingRectangle" />
+
+			<Rectangle Name="RectangleResizeSW" Grid.Row="2" Grid.Column="0" Width="5" Height="5" Fill="Transparent"  Tag="ResizingRectangle"/>
+			<Rectangle Name="RectangleResizeS" Grid.Row="2" Grid.Column="1" Height="5" Fill="Transparent" Tag="ResizingRectangle" />
+			<Rectangle Name="RectangleResizeSE" Grid.Row="2" Grid.Column="2" Width="5" Height="5" Fill="Transparent" Tag="ResizingRectangle" />
+
+		</Grid>
+	</Border>
+</Window>
