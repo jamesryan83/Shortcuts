@@ -1,7 +1,7 @@
 Shortcuts
 --------------------------
 
-This is a Windows Desktop PC application written in C# & WPF.
+This is for PC.  It's in C# & WPF.
 
 You know when a new job comes in to the office and you write an email to those involved with all the links to the files on the server required to do the job.  This program is an alternative to that
 
