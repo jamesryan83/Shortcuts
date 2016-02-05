@@ -9,7 +9,7 @@
 			 xmlns:controls="clr-namespace:CommonUI.Controls;assembly=CommonUI"
 			 xmlns:converters="clr-namespace:CommonUI.Converters;assembly=CommonUI"
 			 SnapsToDevicePixels="True"
-			 FontFamily="Segoe UI Symbol"			 
+			 FontFamily="Segoe UI Symbol"			 			 
              d:DesignHeight="500" d:DesignWidth="700">
 
     <UserControl.Resources>
@@ -35,15 +35,17 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>            
+        <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />            
+			<ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
 
 
         <!-- Menu -->
-        <Menu Grid.ColumnSpan="20" Background="{x:Null}" >
+        <Menu Grid.ColumnSpan="1" Background="{x:Null}" VerticalAlignment="Center" Margin="5 0 0 0" >
             <MenuItem Header="Lists" Foreground="#FF898989">
                 <MenuItem Header="Save" Command="{Binding Path=saveItemsCommand}" InputGestureText="Ctrl+S" />
                 <MenuItem Header="Save As" Command="{Binding Path=saveItemsAsCommand}" />
@@ -60,8 +62,8 @@
 
 
         <!-- Search Textbox -->
-        <Label Grid.Row="1" VerticalAlignment="Center">Filter:</Label>
-        <TextBox Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" VerticalAlignment="Center" Height="30" Margin="5" BorderBrush="{x:Null}" 
+        <Label Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">Filter:</Label>
+        <TextBox Grid.Column="2" VerticalAlignment="Center" Width="300" Height="30" Margin="5" BorderBrush="{x:Null}" VerticalContentAlignment="Center" 
 				 Text="{Binding Path=filterText, UpdateSourceTrigger=PropertyChanged}" ToolTip="Type here to filter the items, but don't reorder items while the list is filtered" />
 
 

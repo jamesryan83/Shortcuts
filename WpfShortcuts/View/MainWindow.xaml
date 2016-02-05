@@ -5,7 +5,7 @@
 		xmlns:viewmodel="clr-namespace:WpfShortcuts.ViewModel"
 		xmlns:model="clr-name"
 		xmlns:controls="clr-namespace:CommonUI.Controls;assembly=CommonUI"		
-        Height="500" Width="700" WindowStyle="None" WindowStartupLocation="CenterScreen" SnapsToDevicePixels="True"
+        Height="500" Width="900" WindowStyle="None" WindowStartupLocation="CenterScreen" SnapsToDevicePixels="True"
 		FontFamily="Segoe UI Symbol" WindowState="{Binding windowState}" ResizeMode="NoResize" Loaded="Window_Loaded">
 
 	
